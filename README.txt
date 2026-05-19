@@ -1,13 +1,12 @@
-EatPilot No Folder Images
+EatPilot Real Food Photos
 
-Версия без папки assets.
-Все картинки встроены прямо в data.js как inline SVG.
-
-Для GitHub/Vercel загружай только:
+Версия с реальными фото готовых блюд через внешние HTTPS-ссылки.
+Папки assets нет, грузишь только:
 - index.html
 - style.css
 - app.js
 - data.js
 - README.txt
 
-Папки загружать не нужно.
+Важно:
+Фото грузятся из интернета. Это легче, чем хранить 100 изображений в проекте.
