@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>EatPilot</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+  <main class="app">
+    <section class="hero">
+      <div class="badge">3000 сценариев · рецепты по кнопке · без API</div>
+      <h1>EatPilot</h1>
+      <p>Подбор еды по запросу, региону и бюджету. КБЖУ, граммовки, стоимость и подробные рецепты.</p>
+    </section>
+
+    <section class="card">
+      <label>Регион</label>
+      <select id="region">
+        <option value="moscow">Москва</option>
+        <option value="spb">Санкт-Петербург</option>
+        <option value="regions_ru">Регионы РФ</option>
+        <option value="minsk">Минск</option>
+        <option value="belarus">Беларусь, регионы</option>
+        <option value="germany">Германия</option>
+        <option value="uae">ОАЭ / Дубай</option>
+      </select>
+
+      <label>Бюджет на порцию</label>
+      <div class="budget-row">
+        <input id="budgetMin" type="number" inputmode="numeric" value="0" placeholder="от" />
+        <input id="budgetMax" type="number" inputmode="numeric" value="700" placeholder="до" />
+      </div>
+
+      <div class="presets" id="budgetPresets">
+        <button data-min="0" data-max="300">0–300</button>
+        <button data-min="300" data-max="600">300–600</button>
+        <button data-min="600" data-max="1000">600–1000</button>
+        <button data-min="1000" data-max="2000">1000–2000</button>
+        <button data-min="0" data-max="999999">Без лимита</button>
+      </div>
+
+      <label>Цель</label>
+      <div class="presets goal" id="goalTabs">
+        <button data-goal="Обычно" class="active">Обычно</button>
+        <button data-goal="Похудение">Похудение</button>
+        <button data-goal="Набор">Набор</button>
+      </div>
+
+      <label>Запрос</label>
+      <textarea id="userInput" placeholder="Например: хочу что-то сытное до 600 ₽ / легкий ужин / что заказать после тренировки"></textarea>
+
+      <button class="main-btn" id="generateBtn">Подобрать еду</button>
+    </section>
+
+    <section class="result hidden" id="resultBox">
+      <div class="result-head">
+        <div>
+          <p>Твой вариант</p>
+          <h2 id="resultTitle">Готово</h2>
+        </div>
+        <span id="matchScore">match</span>
+      </div>
+
+      <div id="resultText"></div>
+      <div id="singleRecipeSlot" class="recipe-slot"></div>
+
+      <div class="actions">
+        <button id="againBtn">Еще вариант</button>
+        <button id="shareBtn">Скопировать</button>
+      </div>
+      <p class="copy" id="copyStatus"></p>
+    </section>
+
+    <section class="card compact">
+      <div class="section-head">
+        <h3>План на день</h3>
+        <span>разная логика</span>
+      </div>
+      <button class="secondary" id="dayPlanBtn">Собрать день питания</button>
+      <div class="day-plan hidden" id="dayPlan"></div>
+      <div id="dayRecipeSlot" class="recipe-slot"></div>
+    </section>
+
+    <section class="card compact">
+      <div class="section-head">
+        <h3>История</h3>
+        <span id="historyCount">0</span>
+      </div>
+      <div id="historyList" class="history-list">
+        <p class="muted">Здесь появятся последние рекомендации.</p>
+      </div>
+    </section>
+
+    <p class="disclaimer">КБЖУ и цены ориентировочные. Это не медицинская рекомендация.</p>
+  </main>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
