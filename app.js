@@ -182,6 +182,22 @@ function scoreScenario(s, intents, text, budget) {
   return score + Math.random();
 }
 
+function cleanBaseName(s) {
+  return s.baseKey || normalize(s.name).replace(/\s*\/\s*(легкая версия|сытная версия|быстрый вариант|без лишнего соуса|домашний вариант).*/g, "").trim();
+}
+
+function uniqueByBase(items) {
+  const seen = new Set();
+  const result = [];
+  for (const item of items) {
+    const key = cleanBaseName(item);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    result.push(item);
+  }
+  return result;
+}
+
 function getCandidates() {
   const budget = getBudget();
   const intents = detectIntent(input.value);
@@ -192,7 +208,9 @@ function getCandidates() {
     ["шаурм", "шаурм"], ["ролл", "ролл"], ["суши", "ролл"], ["бургер", "бургер"],
     ["поке", "поке"], ["суп", "суп"], ["омлет", "омлет"], ["творог", "творог"],
     ["греч", "греч"], ["паста", "паста"], ["макарон", "макарон"], ["том", "том"],
-    ["лосось", "лосось"], ["кревет", "кревет"]
+    ["лосось", "лосось"], ["кревет", "кревет"], ["пицц", "пицц"], ["пельмен", "пельмен"],
+    ["сырник", "сырник"], ["плов", "плов"], ["рамен", "рамен"], ["блин", "блин"],
+    ["кесад", "кесад"], ["фалафель", "фалафель"], ["картош", "картош"]
   ];
 
   for (const [trigger, namePart] of exactRules) {
@@ -207,12 +225,11 @@ function getCandidates() {
     strict = [...scenarios].sort((a,b) => 
       Math.min(Math.abs(a.basePriceRub-budget.min), Math.abs(a.basePriceRub-budget.max)) -
       Math.min(Math.abs(b.basePriceRub-budget.min), Math.abs(b.basePriceRub-budget.max))
-    ).slice(0, 120);
+    ).slice(0, 180);
   }
 
-  return strict
-    .sort((a,b) => scoreScenario(b, intents, input.value, budget) - scoreScenario(a, intents, input.value, budget))
-    .slice(0, 8);
+  const sorted = strict.sort((a,b) => scoreScenario(b, intents, input.value, budget) - scoreScenario(a, intents, input.value, budget));
+  return uniqueByBase(sorted).slice(0, 8);
 }
 
 function budgetLine() {
@@ -230,7 +247,7 @@ function generateResult(useNext=false) {
     if (!useNext || !lastCandidates.length) lastCandidates = getCandidates();
     const main = useNext ? (lastCandidates.shift() || getCandidates()[0]) : lastCandidates[0];
     currentMain = main;
-    const alternatives = getCandidates().filter(s => s.id !== main.id).slice(0,2);
+    const alternatives = uniqueByBase(getCandidates().filter(s => s.id !== main.id && cleanBaseName(s) !== cleanBaseName(main))).slice(0,2);
     const allShown = [main, ...alternatives];
 
     const altText = alternatives.map((s,i) => `${i+2}. ${compactMealLine(s)}`).join("\n\n");
@@ -278,17 +295,17 @@ async function copyResult() {
   }
 }
 
-function candidatesByType(type, usedIds = []) {
+function candidatesByType(type, usedKeys = []) {
   const b = getBudget();
   let pool = scenarios.filter(s => 
     s.mealTypes.includes(type) &&
     s.basePriceRub >= b.min &&
     s.basePriceRub <= b.max &&
-    !usedIds.includes(s.id)
+    !usedKeys.includes(cleanBaseName(s))
   );
 
   if (selectedGoal === "Похудение") {
-    pool = pool.filter(s => s.kcal <= (type === "snack" ? 500 : 720));
+    pool = pool.filter(s => s.kcal <= (type === "snack" ? 560 : 760));
   }
 
   if (selectedGoal === "Набор") {
@@ -296,18 +313,19 @@ function candidatesByType(type, usedIds = []) {
   }
 
   if (!pool.length) {
-    pool = scenarios.filter(s => s.mealTypes.includes(type) && !usedIds.includes(s.id));
+    pool = scenarios.filter(s => s.mealTypes.includes(type) && !usedKeys.includes(cleanBaseName(s)));
   }
 
-  return pool.sort((a,b) => scoreScenario(b, ["Любой"], input.value, getBudget()) - scoreScenario(a, ["Любой"], input.value, getBudget()));
+  const sorted = pool.sort((a,b) => scoreScenario(b, ["Любой"], input.value, getBudget()) - scoreScenario(a, ["Любой"], input.value, getBudget()));
+  return uniqueByBase(sorted);
 }
 
 function generateDayPlan() {
   const used = [];
-  const breakfast = candidatesByType("breakfast", used)[0]; used.push(breakfast.id);
-  const lunch = candidatesByType("lunch", used)[0]; used.push(lunch.id);
-  const snack = candidatesByType("snack", used)[0]; used.push(snack.id);
-  const dinner = candidatesByType("dinner", used)[0]; used.push(dinner.id);
+  const breakfast = candidatesByType("breakfast", used)[0]; used.push(cleanBaseName(breakfast));
+  const lunch = candidatesByType("lunch", used)[0]; used.push(cleanBaseName(lunch));
+  const snack = candidatesByType("snack", used)[0]; used.push(cleanBaseName(snack));
+  const dinner = candidatesByType("dinner", used)[0]; used.push(cleanBaseName(dinner));
 
   currentDay = [breakfast, lunch, snack, dinner];
 
