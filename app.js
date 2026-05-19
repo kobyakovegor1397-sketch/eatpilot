@@ -27,6 +27,7 @@ const region = $("region"), minInput = $("budgetMin"), maxInput = $("budgetMax")
 const resultBox = $("resultBox"), resultText = $("resultText"), resultTitle = $("resultTitle"), matchScore = $("matchScore");
 const copyStatus = $("copyStatus"), historyList = $("historyList"), historyCount = $("historyCount"), dayPlan = $("dayPlan");
 const singleRecipeSlot = $("singleRecipeSlot"), dayRecipeSlot = $("dayRecipeSlot");
+const visualResult = $("visualResult"), dayVisuals = $("dayVisuals");
 
 function normalize(text) {
   return (text || "").toLowerCase().replaceAll("ё","е");
@@ -99,6 +100,29 @@ function compactMealLine(s) {
   return `${s.name}\n${macroLine(s)}\nСтоимость: ${priceToRegion(s.basePriceRub)}`;
 }
 
+function foodCard(s) {
+  return `<div class="food-card">
+    <img src="${s.image || 'data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22900%22%20height%3D%22650%22%20viewBox%3D%220%200%20900%20650%22%3E%0A%3Cdefs%3E%3CradialGradient%20id%3D%22g%22%20cx%3D%2230%25%22%20cy%3D%2220%25%22%20r%3D%2290%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23c9ff6a%22/%3E%3Cstop%20offset%3D%2260%25%22%20stop-color%3D%22%2310140f%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23050705%22/%3E%3C/radialGradient%3E%3Cfilter%20id%3D%22s%22%3E%3CfeDropShadow%20dx%3D%220%22%20dy%3D%2224%22%20stdDeviation%3D%2226%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%22.55%22/%3E%3C/filter%3E%3C/defs%3E%0A%3Crect%20width%3D%22900%22%20height%3D%22650%22%20rx%3D%2248%22%20fill%3D%22url%28%23g%29%22/%3E%0A%3Ccircle%20cx%3D%22725%22%20cy%3D%22120%22%20r%3D%22170%22%20fill%3D%22%23c9ff6a%22%20opacity%3D%22.10%22/%3E%0A%3Ccircle%20cx%3D%22130%22%20cy%3D%22525%22%20r%3D%22210%22%20fill%3D%22%23c9ff6a%22%20opacity%3D%22.13%22/%3E%0A%3Cg%20filter%3D%22url%28%23s%29%22%3E%3Cellipse%20cx%3D%22450%22%20cy%3D%22370%22%20rx%3D%22250%22%20ry%3D%22112%22%20fill%3D%22%230d100d%22%20opacity%3D%22.78%22/%3E%3Cellipse%20cx%3D%22450%22%20cy%3D%22340%22%20rx%3D%22220%22%20ry%3D%2292%22%20fill%3D%22rgba%28255%2C255%2C255%2C.10%29%22%20stroke%3D%22rgba%28255%2C255%2C255%2C.2%29%22%20stroke-width%3D%223%22/%3E%3Ctext%20x%3D%22450%22%20y%3D%22360%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%20font-size%3D%22150%22%3E%F0%9F%8D%BD%3C/text%3E%3C/g%3E%0A%3Ctext%20x%3D%2258%22%20y%3D%2286%22%20fill%3D%22%23fff%22%20font-family%3D%22Arial%22%20font-size%3D%2242%22%20font-weight%3D%22800%22%3EFood%3C/text%3E%0A%3Ctext%20x%3D%2260%22%20y%3D%22130%22%20fill%3D%22%23c9ff6a%22%20font-family%3D%22Arial%22%20font-size%3D%2224%22%20font-weight%3D%22700%22%3EKcal%20%E2%80%A2%20Recipes%20%E2%80%A2%20Budget%3C/text%3E%0A%3C/svg%3E'}" alt="${s.name}">
+    <div>
+      <h4>${s.name}</h4>
+      <p>${macroLine(s)}</p>
+      <p class="food-price">${priceToRegion(s.basePriceRub)}</p>
+    </div>
+  </div>`;
+}
+
+function dayVisualCards(items) {
+  const labels = ["Завтрак", "Обед", "Перекус", "Ужин"];
+  return `<div class="day-grid">${items.map((s, i) => `
+    <div class="day-mini">
+      <img src="${s.image || 'data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22900%22%20height%3D%22650%22%20viewBox%3D%220%200%20900%20650%22%3E%0A%3Cdefs%3E%3CradialGradient%20id%3D%22g%22%20cx%3D%2230%25%22%20cy%3D%2220%25%22%20r%3D%2290%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23c9ff6a%22/%3E%3Cstop%20offset%3D%2260%25%22%20stop-color%3D%22%2310140f%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23050705%22/%3E%3C/radialGradient%3E%3Cfilter%20id%3D%22s%22%3E%3CfeDropShadow%20dx%3D%220%22%20dy%3D%2224%22%20stdDeviation%3D%2226%22%20flood-color%3D%22%23000%22%20flood-opacity%3D%22.55%22/%3E%3C/filter%3E%3C/defs%3E%0A%3Crect%20width%3D%22900%22%20height%3D%22650%22%20rx%3D%2248%22%20fill%3D%22url%28%23g%29%22/%3E%0A%3Ccircle%20cx%3D%22725%22%20cy%3D%22120%22%20r%3D%22170%22%20fill%3D%22%23c9ff6a%22%20opacity%3D%22.10%22/%3E%0A%3Ccircle%20cx%3D%22130%22%20cy%3D%22525%22%20r%3D%22210%22%20fill%3D%22%23c9ff6a%22%20opacity%3D%22.13%22/%3E%0A%3Cg%20filter%3D%22url%28%23s%29%22%3E%3Cellipse%20cx%3D%22450%22%20cy%3D%22370%22%20rx%3D%22250%22%20ry%3D%22112%22%20fill%3D%22%230d100d%22%20opacity%3D%22.78%22/%3E%3Cellipse%20cx%3D%22450%22%20cy%3D%22340%22%20rx%3D%22220%22%20ry%3D%2292%22%20fill%3D%22rgba%28255%2C255%2C255%2C.10%29%22%20stroke%3D%22rgba%28255%2C255%2C255%2C.2%29%22%20stroke-width%3D%223%22/%3E%3Ctext%20x%3D%22450%22%20y%3D%22360%22%20text-anchor%3D%22middle%22%20dominant-baseline%3D%22middle%22%20font-size%3D%22150%22%3E%F0%9F%8D%BD%3C/text%3E%3C/g%3E%0A%3Ctext%20x%3D%2258%22%20y%3D%2286%22%20fill%3D%22%23fff%22%20font-family%3D%22Arial%22%20font-size%3D%2242%22%20font-weight%3D%22800%22%3EFood%3C/text%3E%0A%3Ctext%20x%3D%2260%22%20y%3D%22130%22%20fill%3D%22%23c9ff6a%22%20font-family%3D%22Arial%22%20font-size%3D%2224%22%20font-weight%3D%22700%22%3EKcal%20%E2%80%A2%20Recipes%20%E2%80%A2%20Budget%3C/text%3E%0A%3C/svg%3E'}" alt="${s.name}">
+      <div>
+        <h4>${labels[i]}: ${s.name}</h4>
+        <p>${s.kcal} ккал · ${priceToRegion(s.basePriceRub)}</p>
+      </div>
+    </div>`).join("")}</div>`;
+}
+
 function detailedRecipeText(s) {
   const recipe = recipeById[s.recipeId];
   if (!recipe) return "Рецепт не найден. Кухня объявила забастовку.";
@@ -158,7 +182,7 @@ function scoreScenario(s, intents, text, budget) {
     ["шаурм", "шаурм"], ["ролл", "ролл"], ["суши", "ролл"], ["бургер", "бургер"],
     ["поке", "поке"], ["суп", "суп"], ["омлет", "омлет"], ["творог", "творог"],
     ["греч", "греч"], ["паста", "паста"], ["макарон", "макарон"], ["том", "том"],
-    ["лосось", "лосось"], ["кревет", "кревет"]
+    ["лосось", "лосось"], ["кревет", "кревет"], ["пицц", "пицц"], ["пельмен", "пельмен"], ["сырник", "сырник"], ["рамен", "рамен"], ["плов", "плов"], ["блин", "блин"], ["кесад", "кесад"], ["фалафель", "фалафель"]
   ];
   for (const [trigger, namePart] of exactRules) {
     if (t.includes(trigger) && normalize(s.name).includes(namePart)) score += 80;
@@ -208,7 +232,7 @@ function getCandidates() {
     ["шаурм", "шаурм"], ["ролл", "ролл"], ["суши", "ролл"], ["бургер", "бургер"],
     ["поке", "поке"], ["суп", "суп"], ["омлет", "омлет"], ["творог", "творог"],
     ["греч", "греч"], ["паста", "паста"], ["макарон", "макарон"], ["том", "том"],
-    ["лосось", "лосось"], ["кревет", "кревет"], ["пицц", "пицц"], ["пельмен", "пельмен"],
+    ["лосось", "лосось"], ["кревет", "кревет"], ["пицц", "пицц"], ["пельмен", "пельмен"], ["сырник", "сырник"], ["рамен", "рамен"], ["плов", "плов"], ["блин", "блин"], ["кесад", "кесад"], ["фалафель", "фалафель"], ["пицц", "пицц"], ["пельмен", "пельмен"],
     ["сырник", "сырник"], ["плов", "плов"], ["рамен", "рамен"], ["блин", "блин"],
     ["кесад", "кесад"], ["фалафель", "фалафель"], ["картош", "картош"]
   ];
@@ -242,6 +266,7 @@ function generateResult(useNext=false) {
 
   showResult("Думаю…", "Сверяю запрос, бюджет и КБЖУ…", "loading");
   singleRecipeSlot.innerHTML = "";
+  visualResult.innerHTML = "";
 
   setTimeout(() => {
     if (!useNext || !lastCandidates.length) lastCandidates = getCandidates();
@@ -272,6 +297,7 @@ ${main.humor}`;
 
     lastResult = result;
     showResult(main.name, result, "точно");
+    visualResult.innerHTML = foodCard(main);
     singleRecipeSlot.innerHTML = recipeButtonsFor(allShown, "singleRecipeSlot");
     addToHistory(main);
   }, 600);
@@ -367,6 +393,7 @@ ${priceToRegion(total.rub)}
 Мини-прикол:
 День собран. Осталось только не заменить ужин на “чай с печеньками”.`;
 
+  dayVisuals.innerHTML = dayVisualCards(currentDay);
   dayRecipeSlot.innerHTML = recipeButtonsFor(currentDay, "dayRecipeSlot");
 }
 

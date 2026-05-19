@@ -1,8 +1,10 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;min-height:100vh;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:radial-gradient(circle at 10% 0%,rgba(201,255,106,.18),transparent 32%),linear-gradient(180deg,#070807,#10140f);color:#fff}
-.app{max-width:480px;margin:0 auto;padding:18px 14px 44px}
-.hero{padding:8px 2px 16px}.badge{display:inline-block;padding:8px 12px;border-radius:999px;background:rgba(201,255,106,.1);border:1px solid rgba(201,255,106,.22);color:#c9ff6a;font-size:13px;margin-bottom:16px}
+body{margin:0;min-height:100vh;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:radial-gradient(circle at 10% 0%,rgba(201,255,106,.18),transparent 32%),radial-gradient(circle at 90% 8%,rgba(255,138,0,.13),transparent 28%),linear-gradient(180deg,#070807,#10140f);color:#fff}
+.app{max-width:500px;margin:0 auto;padding:18px 14px 44px}
+.hero{padding:8px 2px 16px}.brand-row{display:flex;gap:12px;align-items:flex-start}.logo-mark{width:48px;height:48px;display:grid;place-items:center;border-radius:18px;background:#c9ff6a;color:#111;font-size:24px;box-shadow:0 12px 38px rgba(201,255,106,.22)}
+.badge{display:inline-block;padding:7px 11px;border-radius:999px;background:rgba(201,255,106,.1);border:1px solid rgba(201,255,106,.22);color:#c9ff6a;font-size:12px;margin-bottom:8px}
 h1{font-size:42px;line-height:.95;margin:0 0 10px;letter-spacing:-1.5px}.hero p{margin:0;color:#b8bdb6;font-size:16px;line-height:1.45}
+.hero-foods{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:10px;margin-top:16px}.hero-foods img{width:100%;height:105px;object-fit:cover;border-radius:22px;border:1px solid rgba(255,255,255,.08);box-shadow:0 18px 50px rgba(0,0,0,.25)}
 .card,.result{background:rgba(25,28,25,.88);border:1px solid rgba(255,255,255,.08);border-radius:28px;padding:18px;margin-top:14px;box-shadow:0 22px 70px rgba(0,0,0,.3);backdrop-filter:blur(16px)}
 .compact{padding:16px}label{display:block;margin:14px 0 8px;color:#e9eee7;font-size:14px}
 select,input,textarea{width:100%;border:none;outline:none;border-radius:16px;background:#101310;color:#fff;border:1px solid rgba(255,255,255,.08);padding:13px;font:inherit}
@@ -14,9 +16,12 @@ button{border:none;border-radius:16px;padding:12px;font:inherit;cursor:pointer;t
 .result-head p{margin:0;color:#aeb5ad;font-size:13px}.result-head h2{margin:2px 0 0;font-size:20px;line-height:1.1;letter-spacing:-.5px}
 .result-head span,.section-head span{padding:6px 10px;border-radius:999px;color:#c9ff6a;background:rgba(201,255,106,.08);border:1px solid rgba(201,255,106,.18);font-size:12px}
 #resultText,.day-plan,.recipe-box{white-space:pre-line;color:#f0f3ef;line-height:1.56;font-size:15.8px}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.food-card{display:grid;grid-template-columns:110px 1fr;gap:12px;align-items:center;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.07);border-radius:22px;padding:10px;margin:8px 0 14px}
+.food-card img{width:110px;height:92px;object-fit:cover;border-radius:17px}.food-card h4{margin:0 0 5px;font-size:15px}.food-card p{margin:0;color:#aeb5ad;font-size:13px;line-height:1.35}.food-price{color:#c9ff6a!important;font-weight:800;margin-top:5px!important}
+.day-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.day-mini{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.07);border-radius:20px;overflow:hidden}.day-mini img{width:100%;height:92px;object-fit:cover}.day-mini div{padding:10px}.day-mini h4{margin:0 0 4px;font-size:13px}.day-mini p{margin:0;color:#aeb5ad;font-size:12px}
 .copy{min-height:19px;margin:12px 0 0;color:#c9ff6a;font-size:14px}.history-list{display:grid;gap:9px}.history-item{padding:12px;border-radius:16px;background:rgba(255,255,255,.055);font-size:14px;line-height:1.35}.history-item span{display:block;margin-top:4px;color:#aeb5ad;font-size:12px}
 .muted{color:#aeb5ad;margin:0}.disclaimer{margin:14px 6px 0;color:#7f877e;font-size:12px;line-height:1.4;text-align:center}
 .recipe-buttons{display:grid;grid-template-columns:1fr;gap:8px;margin-top:12px}.small-btn{text-align:left;font-size:14px;padding:11px}.recipe-box{margin-top:12px;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:14px}
 textarea:focus,input:focus,select:focus{border-color:rgba(201,255,106,.45);box-shadow:0 0 0 3px rgba(201,255,106,.08)}
 @keyframes show{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-@media(max-width:370px){h1{font-size:36px}.goal,.budget-row{grid-template-columns:1fr}.presets{grid-template-columns:1fr}}
+@media(max-width:370px){h1{font-size:36px}.goal,.budget-row,.day-grid{grid-template-columns:1fr}.presets{grid-template-columns:1fr}.food-card{grid-template-columns:1fr}.food-card img{width:100%;height:150px}}
