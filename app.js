@@ -102,7 +102,7 @@ function compactMealLine(s) {
 
 function foodCard(s) {
   return `<div class="food-card">
-    <img src="${s.image || 'https://images.unsplash.com/photo-1543352634-a1c51d9f1fa7?auto=format&fit=crop&w=900&q=85'}" alt="${s.name}">
+    <img src="${s.image || 'https://images.unsplash.com/photo-1543352634-a1c51d9f1fa7?auto=format&fit=crop&w=900&h=650&q=85'}" alt="${s.name}" onerror="this.onerror=null;this.src='data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22900%22%20height%3D%22650%22%20viewBox%3D%220%200%20900%20650%22%3E%3Cdefs%3E%3CradialGradient%20id%3D%22g%22%20cx%3D%2230%25%22%20cy%3D%2220%25%22%20r%3D%2290%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23c9ff6a%22/%3E%3Cstop%20offset%3D%2260%25%22%20stop-color%3D%22%2310140f%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23050705%22/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect%20width%3D%22900%22%20height%3D%22650%22%20rx%3D%2248%22%20fill%3D%22url%28%23g%29%22/%3E%3Ctext%20x%3D%22450%22%20y%3D%22310%22%20text-anchor%3D%22middle%22%20font-size%3D%22130%22%3E%F0%9F%8D%BD%3C/text%3E%3Ctext%20x%3D%22450%22%20y%3D%22410%22%20text-anchor%3D%22middle%22%20fill%3D%22%23ffffff%22%20font-family%3D%22Arial%22%20font-size%3D%2246%22%20font-weight%3D%22800%22%3EEatPilot%3C/text%3E%3C/svg%3E'">
     <div>
       <h4>${s.name}</h4>
       <p>${macroLine(s)}</p>
@@ -115,7 +115,7 @@ function dayVisualCards(items) {
   const labels = ["Завтрак", "Обед", "Перекус", "Ужин"];
   return `<div class="day-grid">${items.map((s, i) => `
     <div class="day-mini">
-      <img src="${s.image || 'https://images.unsplash.com/photo-1543352634-a1c51d9f1fa7?auto=format&fit=crop&w=900&q=85'}" alt="${s.name}">
+      <img src="${s.image || 'https://images.unsplash.com/photo-1543352634-a1c51d9f1fa7?auto=format&fit=crop&w=900&h=650&q=85'}" alt="${s.name}" onerror="this.onerror=null;this.src='data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22900%22%20height%3D%22650%22%20viewBox%3D%220%200%20900%20650%22%3E%3Cdefs%3E%3CradialGradient%20id%3D%22g%22%20cx%3D%2230%25%22%20cy%3D%2220%25%22%20r%3D%2290%25%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23c9ff6a%22/%3E%3Cstop%20offset%3D%2260%25%22%20stop-color%3D%22%2310140f%22/%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23050705%22/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect%20width%3D%22900%22%20height%3D%22650%22%20rx%3D%2248%22%20fill%3D%22url%28%23g%29%22/%3E%3Ctext%20x%3D%22450%22%20y%3D%22310%22%20text-anchor%3D%22middle%22%20font-size%3D%22130%22%3E%F0%9F%8D%BD%3C/text%3E%3Ctext%20x%3D%22450%22%20y%3D%22410%22%20text-anchor%3D%22middle%22%20fill%3D%22%23ffffff%22%20font-family%3D%22Arial%22%20font-size%3D%2246%22%20font-weight%3D%22800%22%3EEatPilot%3C/text%3E%3C/svg%3E'">
       <div>
         <h4>${labels[i]}: ${s.name}</h4>
         <p>${s.kcal} ккал · ${priceToRegion(s.basePriceRub)}</p>
